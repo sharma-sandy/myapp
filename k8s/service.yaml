@@ -1,0 +1,18 @@
+# k8s/service.yaml
+apiVersion: v1
+kind: Service
+metadata:
+  name: simple-flask-service
+  labels:
+    app: simple-flask
+spec:
+  type: NodePort # Exposes the Service on each Node's IP at a static port (the NodePort)
+                 # Good for local testing. For cloud, you'd often use LoadBalancer.
+  selector:
+    app: simple-flask # Selects pods with label "app: simple-flask" (defined in Deployment)
+  ports:
+  - protocol: TCP
+    port: 80         # Port the service will be available on *within* the cluster
+    targetPort: 5000 # Port on the pods (containerPort) that the service will forward traffic to
+    # nodePort: 30007 # Optional: If you want to specify a NodePort (must be in 30000-32767 range)
+                     # If not specified, Kubernetes will assign one.
